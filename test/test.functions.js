@@ -112,6 +112,21 @@ describe('Twig.js Functions ->', function () {
             }
         }).should.equal('1-test-value-true');
     });
+    it('should execute chained functions passed as context object parameters with arguments', function () {
+      twig({
+          data: '{{ obj.value(1, "test").value2(2, "test2") }}'
+      }).render({
+          obj: {
+              test: 'value',
+              value(a, b) {
+                  return a + '-' + b + '-' + this.test;
+              },
+              value2(a, b) {
+                  return '-' + a + '-' + b + '-' + this.test;
+              }
+          }
+      }).should.equal('1-test-value-2-test2-value2');
+  });
 
     it('should execute functions passed as context object parameters', function () {
         twig({
